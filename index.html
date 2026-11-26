@@ -1,88 +1,254 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon site internet</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<title>Mime - Virgile Chorlet</title>
 
-        html, body {
-            width: 100%;
-            min-height: 100%;
-        }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-        /* Affichage ordinateur */
-        #pdf-viewer {
-            display: block;
-            width: 100%;
-            height: 100vh;
-            border: none;
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #071c3d;
+    color: white;
+}
 
-        /* Affichage smartphone */
-        .mobile-view {
-            display: none;
-        }
+header {
+    text-align: center;
+    padding: 25px 10px;
+    background: #102e58;
+}
 
-        @media screen and (max-width: 768px) {
+header h1 {
+    margin: 0;
+    font-size: 30px;
+    letter-spacing: 3px;
+}
 
-            #pdf-viewer {
-                display: none;
-            }
+header p {
+    margin-bottom: 0;
+    letter-spacing: 2px;
+}
 
-            .mobile-view {
-                display: flex;
-                min-height: 100vh;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                padding: 25px;
-                text-align: center;
-                font-family: Arial, sans-serif;
-            }
+nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px 10px;
+}
 
-            .mobile-view a {
-                display: inline-block;
-                margin-top: 20px;
-                padding: 16px 25px;
-                background: #222222;
-                color: white;
-                text-decoration: none;
-                border-radius: 8px;
-                font-size: 17px;
-            }
-        }
-    </style>
+nav button {
+    background: #244b79;
+    color: white;
+    border: 1px solid white;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+nav button.active,
+nav button:hover {
+    background: #d5ad43;
+    color: #071c3d;
+}
+
+main {
+    max-width: 1100px;
+    margin: 10px auto;
+    padding: 0 15px;
+}
+
+.viewer {
+    background: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+iframe {
+    width: 100%;
+    height: 75vh;
+    min-height: 500px;
+    border: none;
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.navigation button {
+    background: #d5ad43;
+    color: #071c3d;
+    border: none;
+    padding: 14px 25px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.navigation button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+#pageNumber {
+    text-align: center;
+    padding: 10px;
+    color: #ddd;
+}
+
+.openPdf {
+    display: block;
+    text-align: center;
+    color: white;
+    margin: 15px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #102e58;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 23px;
+    }
+
+    nav {
+        gap: 6px;
+    }
+
+    nav button {
+        padding: 10px 13px;
+        font-size: 13px;
+    }
+
+    iframe {
+        height: 70vh;
+        min-height: 400px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <!-- Version ordinateur -->
-    <iframe
-        id="pdf-viewer"
-        src="présentation.pdf"
-        title="Présentation PDF">
-    </iframe>
+<header>
+    <h1>MIME</h1>
+    <p>VIRGILE CHORLET</p>
+</header>
 
-    <!-- Version smartphone -->
-    <div class="mobile-view">
-        <h2>Bienvenue</h2>
+<nav id="menu"></nav>
 
-        <p>
-            Consultez ma présentation en cliquant
-            sur le bouton ci-dessous.
-        </p>
+<main>
 
-        <a href="présentation.pdf" target="_blank">
-            Consulter ma présentation
-        </a>
+    <div class="viewer">
+        <iframe id="pdfViewer"
+                src="web1.pdf"
+                title="Présentation de mime">
+        </iframe>
     </div>
+
+    <a id="openPdf" class="openPdf"
+       href="page1.pdf" target="_blank">
+       Ouvrir le PDF séparément
+    </a>
+
+    <div id="pageNumber">Page 1 sur 5</div>
+
+    <div class="navigation">
+        <button id="previous" onclick="changePage(-1)">
+            ← Précédent
+        </button>
+
+        <button id="next" onclick="changePage(1)">
+            Suivant →
+        </button>
+    </div>
+
+</main>
+
+<footer>
+    Virgile Chorlet - Mime et art du mouvement
+</footer>
+
+<script>
+
+const pages = [
+    "web1.pdf",
+    "web2.pdf",
+    "web3.pdf",
+    "web4.pdf",
+    "web5.pdf"
+];
+
+let currentPage = 0;
+
+const menu = document.getElementById("menu");
+const viewer = document.getElementById("pdfViewer");
+
+function displayPage() {
+
+    viewer.src = pages[currentPage];
+
+    document.getElementById("openPdf").href =
+        pages[currentPage];
+
+    document.getElementById("pageNumber").textContent =
+        "Page " + (currentPage + 1) + " sur 5";
+
+    document.getElementById("previous").disabled =
+        currentPage === 0;
+
+    document.getElementById("next").disabled =
+        currentPage === 4;
+
+    menu.innerHTML = "";
+
+    pages.forEach((page, index) => {
+
+        const button = document.createElement("button");
+
+        button.textContent = "Page " + (index + 1);
+
+        if (index === currentPage) {
+            button.classList.add("active");
+        }
+
+        button.onclick = () => {
+            currentPage = index;
+            displayPage();
+        };
+
+        menu.appendChild(button);
+
+    });
+}
+
+function changePage(direction) {
+
+    currentPage += direction;
+
+    if (currentPage < 0) currentPage = 0;
+    if (currentPage > 4) currentPage = 4;
+
+    displayPage();
+}
+
+displayPage();
+
+</script>
 
 </body>
 </html>
