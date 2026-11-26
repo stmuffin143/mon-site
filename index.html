@@ -172,9 +172,11 @@ document.addEventListener("keydown", function(e) {
 <style>
 .reseaux-sociaux {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 18px;
   z-index: 9999;
@@ -196,25 +198,20 @@ document.addEventListener("keydown", function(e) {
   height: 21px;
 }
 
-.reseaux-sociaux a:hover {
-  transform: scale(1.12);
-}
-
 @media (max-width: 600px) {
   .reseaux-sociaux {
-    bottom: 15px;
-    right: 15px;
-    gap: 12px;
+    right: 8px;
+    gap: 14px;
   }
 
   .reseaux-sociaux a {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
   }
 
   .reseaux-sociaux img {
-    width: 19px;
-    height: 19px;
+    width: 18px;
+    height: 18px;
   }
 }
 </style>
