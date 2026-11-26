@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Virgile Chorlet - Mime</title>
+<title>Mime - Virgile Chorlet</title>
 
 <style>
 * {
@@ -13,93 +13,79 @@
     box-sizing: border-box;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+body {
     background: #071c3d;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
-
-/* Présentation plein écran */
 
 #presentation {
     width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-#pdf {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
-    background: #071c3d;
-}
-
-/* Boutons de navigation */
-
-.nav {
-    position: fixed;
-    bottom: 22px;
-    width: 43px;
-    height: 43px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(7, 28, 61, 0.75);
-    color: white;
-    font-size: 25px;
-    cursor: pointer;
-    z-index: 10;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+}
+
+#page {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+button {
+    position: fixed;
+    bottom: 20px;
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(7,28,61,0.75);
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#prev {
+    left: 20px;
 }
 
 #next {
-    right: 22px;
+    right: 20px;
 }
 
-#previous {
-    left: 22px;
-}
-
-.nav:hover {
+button:hover {
     background: #d5ad43;
     color: #071c3d;
 }
 
 #counter {
     position: fixed;
-    bottom: 34px;
+    bottom: 33px;
     left: 50%;
     transform: translateX(-50%);
     color: white;
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    z-index: 10;
-    background: rgba(7,28,61,0.65);
-    padding: 5px 12px;
-    border-radius: 15px;
+    font: 12px Arial;
 }
 
-@media (max-width: 600px) {
-    .nav {
-        bottom: 15px;
-        width: 40px;
-        height: 40px;
+@media(max-width:600px) {
+    button {
+        bottom: 12px;
+    }
+
+    #prev {
+        left: 12px;
     }
 
     #next {
-        right: 15px;
-    }
-
-    #previous {
-        left: 15px;
+        right: 12px;
     }
 
     #counter {
-        bottom: 27px;
+        bottom: 25px;
     }
 }
 </style>
@@ -109,20 +95,12 @@ html, body {
 
 <div id="presentation">
 
-    <iframe id="pdf"
-        title="Virgile Chorlet"
-        src="web1.pdf#toolbar=0&navpanes=0&view=Fit">
-    </iframe>
+    <img id="page" src="page1.jpg"
+         alt="Présentation de Virgile Chorlet">
 
-    <button class="nav" id="previous"
-        onclick="changePage(-1)" aria-label="Page précédente">
-        ←
-    </button>
+    <button id="prev" onclick="change(-1)">←</button>
 
-    <button class="nav" id="next"
-        onclick="changePage(1)" aria-label="Page suivante">
-        →
-    </button>
+    <button id="next" onclick="change(1)">→</button>
 
     <div id="counter">1 / 5</div>
 
@@ -130,45 +108,34 @@ html, body {
 
 <script>
 
-const pages = [
-    "web1.pdf",
-    "web2.pdf",
-    "web3.pdf",
-    "web4.pdf",
-    "web5.pdf"
+const images = [
+    "page1.jpg",
+    "page2.jpg",
+    "page3.jpg",
+    "page4.jpg",
+    "page5.jpg"
 ];
 
 let current = 0;
 
 function showPage() {
-
-    document.getElementById("pdf").src =
-        pages[current] + "#toolbar=0&navpanes=0&view=Fit";
+    document.getElementById("page").src =
+        images[current];
 
     document.getElementById("counter").textContent =
-        (current + 1) + " / " + pages.length;
-
+        (current + 1) + " / 5";
 }
 
-function changePage(direction) {
-
-    current += direction;
-
-    if (current >= pages.length) {
-        current = 0;
-    }
-
-    if (current < 0) {
-        current = pages.length - 1;
-    }
+function change(direction) {
+    current = (current + direction + images.length)
+        % images.length;
 
     showPage();
-
 }
 
-document.addEventListener("keydown", function(event) {
-    if (event.key === "ArrowRight") changePage(1);
-    if (event.key === "ArrowLeft") changePage(-1);
+document.addEventListener("keydown", function(e) {
+    if (e.key === "ArrowRight") change(1);
+    if (e.key === "ArrowLeft") change(-1);
 });
 
 </script>
