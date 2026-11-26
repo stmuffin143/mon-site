@@ -2,141 +2,104 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Mime - Virgile Chorlet</title>
+<title>Virgile Chorlet - Mime</title>
 
 <style>
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
     background: #071c3d;
+}
+
+/* Présentation plein écran */
+
+#presentation {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#pdf {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background: #071c3d;
+}
+
+/* Boutons de navigation */
+
+.nav {
+    position: fixed;
+    bottom: 22px;
+    width: 43px;
+    height: 43px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(7, 28, 61, 0.75);
     color: white;
-}
-
-header {
-    text-align: center;
-    padding: 25px 10px;
-    background: #102e58;
-}
-
-header h1 {
-    margin: 0;
-    font-size: 30px;
-    letter-spacing: 3px;
-}
-
-header p {
-    margin-bottom: 0;
-    letter-spacing: 2px;
-}
-
-nav {
+    font-size: 25px;
+    cursor: pointer;
+    z-index: 10;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 20px 10px;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
 }
 
-nav button {
-    background: #244b79;
-    color: white;
-    border: 1px solid white;
-    padding: 12px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 15px;
+#next {
+    right: 22px;
 }
 
-nav button.active,
-nav button:hover {
+#previous {
+    left: 22px;
+}
+
+.nav:hover {
     background: #d5ad43;
     color: #071c3d;
 }
 
-main {
-    max-width: 1100px;
-    margin: 10px auto;
-    padding: 0 15px;
-}
-
-.viewer {
-    background: white;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-iframe {
-    width: 100%;
-    height: 75vh;
-    min-height: 500px;
-    border: none;
-}
-
-.navigation {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    margin: 20px 0;
-}
-
-.navigation button {
-    background: #d5ad43;
-    color: #071c3d;
-    border: none;
-    padding: 14px 25px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.navigation button:disabled {
-    opacity: 0.4;
-    cursor: default;
-}
-
-#pageNumber {
-    text-align: center;
-    padding: 10px;
-    color: #ddd;
-}
-
-.openPdf {
-    display: block;
-    text-align: center;
+#counter {
+    position: fixed;
+    bottom: 34px;
+    left: 50%;
+    transform: translateX(-50%);
     color: white;
-    margin: 15px;
-}
-
-footer {
-    text-align: center;
-    padding: 20px;
-    background: #102e58;
-    font-size: 13px;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    z-index: 10;
+    background: rgba(7,28,61,0.65);
+    padding: 5px 12px;
+    border-radius: 15px;
 }
 
 @media (max-width: 600px) {
-    header h1 {
-        font-size: 23px;
+    .nav {
+        bottom: 15px;
+        width: 40px;
+        height: 40px;
     }
 
-    nav {
-        gap: 6px;
+    #next {
+        right: 15px;
     }
 
-    nav button {
-        padding: 10px 13px;
-        font-size: 13px;
+    #previous {
+        left: 15px;
     }
 
-    iframe {
-        height: 70vh;
-        min-height: 400px;
+    #counter {
+        bottom: 27px;
     }
 }
 </style>
@@ -144,44 +107,26 @@ footer {
 
 <body>
 
-<header>
-    <h1>MIME</h1>
-    <p>VIRGILE CHORLET</p>
-</header>
+<div id="presentation">
 
-<nav id="menu"></nav>
+    <iframe id="pdf"
+        title="Virgile Chorlet"
+        src="web1.pdf#toolbar=0&navpanes=0&view=Fit">
+    </iframe>
 
-<main>
+    <button class="nav" id="previous"
+        onclick="changePage(-1)" aria-label="Page précédente">
+        ←
+    </button>
 
-    <div class="viewer">
-        <iframe id="pdfViewer"
-                src="web1.pdf"
-                title="Présentation de mime">
-        </iframe>
-    </div>
+    <button class="nav" id="next"
+        onclick="changePage(1)" aria-label="Page suivante">
+        →
+    </button>
 
-    <a id="openPdf" class="openPdf"
-       href="web1.pdf" target="_blank">
-       Ouvrir le PDF séparément
-    </a>
+    <div id="counter">1 / 5</div>
 
-    <div id="pageNumber">Page 1 sur 5</div>
-
-    <div class="navigation">
-        <button id="previous" onclick="changePage(-1)">
-            ← Précédent
-        </button>
-
-        <button id="next" onclick="changePage(1)">
-            Suivant →
-        </button>
-    </div>
-
-</main>
-
-<footer>
-    Virgile Chorlet - Mime et art du mouvement
-</footer>
+</div>
 
 <script>
 
@@ -193,60 +138,38 @@ const pages = [
     "web5.pdf"
 ];
 
-let currentPage = 0;
+let current = 0;
 
-const menu = document.getElementById("menu");
-const viewer = document.getElementById("pdfViewer");
+function showPage() {
 
-function displayPage() {
+    document.getElementById("pdf").src =
+        pages[current] + "#toolbar=0&navpanes=0&view=Fit";
 
-    viewer.src = pages[currentPage];
+    document.getElementById("counter").textContent =
+        (current + 1) + " / " + pages.length;
 
-    document.getElementById("openPdf").href =
-        pages[currentPage];
-
-    document.getElementById("pageNumber").textContent =
-        "Page " + (currentPage + 1) + " sur 5";
-
-    document.getElementById("previous").disabled =
-        currentPage === 0;
-
-    document.getElementById("next").disabled =
-        currentPage === 4;
-
-    menu.innerHTML = "";
-
-    pages.forEach((page, index) => {
-
-        const button = document.createElement("button");
-
-        button.textContent = "Page " + (index + 1);
-
-        if (index === currentPage) {
-            button.classList.add("active");
-        }
-
-        button.onclick = () => {
-            currentPage = index;
-            displayPage();
-        };
-
-        menu.appendChild(button);
-
-    });
 }
 
 function changePage(direction) {
 
-    currentPage += direction;
+    current += direction;
 
-    if (currentPage < 0) currentPage = 0;
-    if (currentPage > 4) currentPage = 4;
+    if (current >= pages.length) {
+        current = 0;
+    }
 
-    displayPage();
+    if (current < 0) {
+        current = pages.length - 1;
+    }
+
+    showPage();
+
 }
 
-displayPage();
+document.addEventListener("keydown", function(event) {
+    if (event.key === "ArrowRight") changePage(1);
+    if (event.key === "ArrowLeft") changePage(-1);
+});
 
 </script>
 
