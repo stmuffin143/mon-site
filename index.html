@@ -28,6 +28,14 @@ body {
     align-items: center;
 }
 
+/* Zone de présentation au format 16:9 */
+#canvas {
+    position: relative;
+    width: min(100vw, 177.7778vh);
+    aspect-ratio: 16 / 9;
+    flex-shrink: 0;
+}
+
 #page {
     width: 100%;
     height: 100%;
@@ -35,7 +43,23 @@ body {
     display: block;
 }
 
-button {
+/* Photo interactive : LE MIME */
+#hotspot-mime {
+    position: absolute;
+    left: 63.8%;
+    top: 1.5%;
+    width: 11%;
+    height: 12%;
+    z-index: 5;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+}
+
+/* Flèches */
+button.nav {
     position: fixed;
     bottom: 20px;
     width: 42px;
@@ -57,7 +81,7 @@ button {
     right: 20px;
 }
 
-button:hover {
+button.nav:hover {
     background: #d5ad43;
     color: #071c3d;
 }
@@ -69,10 +93,11 @@ button:hover {
     transform: translateX(-50%);
     color: white;
     font: 12px Arial;
+    z-index: 10;
 }
 
 @media(max-width:600px) {
-    button {
+    button.nav {
         bottom: 12px;
     }
 
@@ -88,6 +113,52 @@ button:hover {
         bottom: 25px;
     }
 }
+
+/* Réseaux sociaux */
+.reseaux-sociaux {
+    position: fixed;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    z-index: 9999;
+}
+
+.reseaux-sociaux a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.reseaux-sociaux img {
+    width: 21px;
+    height: 21px;
+}
+
+@media (max-width: 600px) {
+    .reseaux-sociaux {
+        right: 8px;
+        gap: 14px;
+    }
+
+    .reseaux-sociaux a {
+        width: 32px;
+        height: 32px;
+    }
+
+    .reseaux-sociaux img {
+        width: 18px;
+        height: 18px;
+    }
+}
 </style>
 </head>
 
@@ -95,12 +166,25 @@ button:hover {
 
 <div id="presentation">
 
-    <img id="page" src="page1.jpg"
-         alt="Présentation de Virgile Chorlet">
+    <div id="canvas">
 
-    <button id="prev" onclick="change(-1)">←</button>
+        <img id="page" src="page1.jpg"
+             alt="Présentation de Virgile Chorlet">
 
-    <button id="next" onclick="change(1)">→</button>
+        <!-- CLIC SUR LA PHOTO LE MIME -->
+        <button id="hotspot-mime"
+                type="button"
+                aria-label="Accéder à la page 2"
+                onclick="goToPage(1)">
+        </button>
+
+    </div>
+
+    <button class="nav" id="prev"
+            onclick="change(-1)">←</button>
+
+    <button class="nav" id="next"
+            onclick="change(1)">→</button>
 
     <div id="counter">1 / 5</div>
 
@@ -126,6 +210,11 @@ function showPage() {
         (current + 1) + " / 5";
 }
 
+function goToPage(number) {
+    current = number;
+    showPage();
+}
+
 function change(direction) {
     current = (current + direction + images.length)
         % images.length;
@@ -139,82 +228,33 @@ document.addEventListener("keydown", function(e) {
 });
 
 </script>
+
 <!-- Réseaux sociaux -->
 <div class="reseaux-sociaux">
 
-  <!-- Instagram -->
-  <a href="https://www.instagram.com/nanocharlot/"
-     target="_blank"
-     rel="noopener noreferrer"
-     aria-label="Instagram">
-    <img src="https://cdn.simpleicons.org/instagram"
-         alt="Instagram">
-  </a>
+    <a href="https://www.instagram.com/nanocharlot/"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Instagram">
+        <img src="https://cdn.simpleicons.org/instagram"
+             alt="Instagram">
+    </a>
 
-  <!-- Facebook -->
-  <a href="https://www.facebook.com/search/top?q=Virgile%20Nano%20Charlot"
-     target="_blank"
-     rel="noopener noreferrer"
-     aria-label="Facebook">
-    <img src="https://cdn.simpleicons.org/facebook"
-         alt="Facebook">
-  </a>
+    <a href="https://www.facebook.com/search/top?q=Virgile%20Nano%20Charlot"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Facebook">
+        <img src="https://cdn.simpleicons.org/facebook"
+             alt="Facebook">
+    </a>
 
-  <!-- Email -->
-  <a href="mailto:virgile_mimo@yahoo.fr"
-     aria-label="Envoyer un email">
-    <img src="https://cdn.simpleicons.org/maildotru"
-         alt="Email">
-  </a>
+    <a href="mailto:virgile_mimo@yahoo.fr"
+       aria-label="Envoyer un email">
+        <img src="https://cdn.simpleicons.org/maildotru"
+             alt="Email">
+    </a>
 
 </div>
 
-<style>
-.reseaux-sociaux {
-  position: fixed;
-  top: 50%;
-  right: 15px;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-  z-index: 9999;
-}
-
-.reseaux-sociaux a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background: white;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.reseaux-sociaux img {
-  width: 21px;
-  height: 21px;
-}
-
-@media (max-width: 600px) {
-  .reseaux-sociaux {
-    right: 8px;
-    gap: 14px;
-  }
-
-  .reseaux-sociaux a {
-    width: 32px;
-    height: 32px;
-  }
-
-  .reseaux-sociaux img {
-    width: 18px;
-    height: 18px;
-  }
-}
-</style>
-</body>
 </body>
 </html>
